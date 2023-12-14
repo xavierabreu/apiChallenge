@@ -1,10 +1,10 @@
 let resultsContainer = document.getElementById("results");
 
-fetch("http://ergast.com/api/f1/current/last/results.json")
+fetch("https://ergast.com/api/f1/current/last/results.json")
     .then(function (response) {
         return response.json();
     })
-    
+
     .then(function (json) {
         let raceResults = json.MRData.RaceTable.Races[0].Results;
 
