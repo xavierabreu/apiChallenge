@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>F1 Current Race Results</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .result-card {
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>F1 Current Race Results</h1>
+    <div id="results" class="row"></div>
+  </div>
+
+  <script>
+    // Function to fetch data from the API and display it
+    async function fetchAndDisplayResults() {
+      try {
+        const response = await fetch('http://ergast.com/api/f1/current/last/results.json');
+        const data = await response.json();
+
+        // Extracting relevant information (Pos, Driver, Time) from the API response
+        const raceResults = data.MRData.RaceTable.Races[0].Results;
+
+        // Displaying the information on the webpage
+        const resultsContainer = document.getElementById('results');
+
+        raceResults.forEach(result => {
+          const pos = result.position;
+          const driver = result.Driver.givenName + ' ' + result.Driver.familyName;
+          const time = result.Time.time;
+
+          // Creating a Bootstrap card for each result
+          const card = document.createElement('div');
+          card.className = 'col-md-4 result-card';
+          card.innerHTML = `
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Position: ${pos}</h5>
+                <p class="card-text">Driver: ${driver}</p>
+                <p class="card-text">Time: ${time}</p>
+              </div>
+            </div>
+          `;
+          resultsContainer.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    // Call the function when the page loads
+    window.onload = fetchAndDisplayResults;
+  </script>
+
+  <!-- Bootstrap JS and Popper.js -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
